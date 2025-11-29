@@ -1,13 +1,16 @@
-import { API_BASE_URL } from "../lib/config";
+import { env } from "../lib/env";
 import type { RandomUsersResponse } from "../lib/types";
 import { UserDetailsLoader } from "../lib/user-details";
 import { UserCardWrapper } from "./ui/user-card-wrapper";
 import { CardGridSkeleton } from "./ui/card-grid-skeleton";
 
 export async function RandomUsersList() {
-  const response = await fetch(`${API_BASE_URL}/api/users/random?count=10`, {
-    cache: "no-store",
-  });
+  const response = await fetch(
+    `${env.NEXT_PUBLIC_API_URL}/api/users/random?count=10`,
+    {
+      cache: "no-store",
+    }
+  );
 
   if (!response.ok) {
     throw new Error("Failed to fetch random users");

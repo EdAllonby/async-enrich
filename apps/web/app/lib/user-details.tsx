@@ -2,11 +2,11 @@
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type ReactNode } from "react";
-import { API_BASE_URL } from "./config";
+import { env } from "./env";
 import type { ExtraDetails } from "./types";
 
 async function fetchUserDetails(userIds: number[]): Promise<ExtraDetails[]> {
-  const response = await fetch(`${API_BASE_URL}/api/users/details`, {
+  const response = await fetch(`${env.NEXT_PUBLIC_API_URL}/api/users/details`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userIds }),

@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "../../lib/config";
+import { env } from "../../lib/env";
 import type { RoleUsersResponse } from "../../lib/types";
 import { UserDetailsLoader } from "../../lib/user-details";
 import { UserCardWrapper } from "../../components/ui/user-card-wrapper";
@@ -13,7 +13,7 @@ export async function RoleUsersList({
   page: number;
 }) {
   const response = await fetch(
-    `${API_BASE_URL}/api/users/role/${encodeURIComponent(role)}?page=${page}&pageSize=10`,
+    `${env.NEXT_PUBLIC_API_URL}/api/users/role/${encodeURIComponent(role)}?page=${page}&pageSize=10`,
     { cache: "no-store" }
   );
 
