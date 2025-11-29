@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
+import { UserExtraDetailsProvider, UserAge, UserLocation } from "./user-extra-details";
 
 // Type definitions for our API response
 interface User {
@@ -44,9 +45,15 @@ async function UsersList({ page }: { page: number }) {
 
   const result: UsersResponse = await response.json();
   const { data: users, pagination } = result;
+  
+  // Get all user IDs for the extra details fetch
+  const userIds = users.map((u) => u.id);
 
   return (
     <>
+      {/* Client component that fetches extra details asynchronously */}
+      <UserExtraDetailsProvider userIds={userIds} />
+      
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto mb-8">
         {users.map((user) => (
           <div
@@ -62,15 +69,21 @@ async function UsersList({ page }: { page: number }) {
               />
             </div>
             <div className="flex-1 min-w-0">
-              <h2 className="text-base font-semibold text-gray-50 mb-0.5">
-                {user.name}
-              </h2>
+              <div className="flex items-center gap-2 mb-0.5">
+                <h2 className="text-base font-semibold text-gray-50">
+                  {user.name}
+                </h2>
+                {/* Age loads asynchronously after initial render */}
+                <UserAge userId={user.id} />
+              </div>
               <p className="text-xs text-indigo-400 font-medium mb-1">
                 {user.role}
               </p>
-              <p className="text-xs text-gray-400 overflow-hidden text-ellipsis whitespace-nowrap">
+              <p className="text-xs text-gray-400 overflow-hidden text-ellipsis whitespace-nowrap mb-1">
                 {user.email}
               </p>
+              {/* Location loads asynchronously after initial render */}
+              <UserLocation userId={user.id} />
             </div>
             <div className="text-xs text-gray-500 font-mono">
               #{user.id}
@@ -224,11 +237,12 @@ export default async function UsersPage({ searchParams }: PageProps) {
           Team Directory
         </h1>
         <p className="text-gray-400 text-base max-w-xl mx-auto mb-4 leading-relaxed">
-          Browse our team with server-side pagination. Each page loads 10 users from the API.
+          Users load instantly, then <span className="text-emerald-400">age</span> and{" "}
+          <span className="text-gray-300">location</span> are adorned asynchronously.
         </p>
         <div className="inline-flex items-center gap-2 bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 px-3 py-1.5 rounded-full text-xs font-medium">
           <span className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-pulse" />
-          Server Component with URL-based Pagination
+          RSC + Async Client Enrichment
         </div>
       </div>
 
@@ -238,9 +252,14 @@ export default async function UsersPage({ searchParams }: PageProps) {
 
       <div className="text-center mt-10 text-gray-500 text-xs">
         <p>
-          Data fetched server-side from{" "}
+          Initial data from{" "}
           <code className="font-mono bg-white/[0.08] px-2 py-1 rounded">
-            /api/users?page={page}&pageSize=10
+            /api/users
+          </code>
+          {" "}&bull;{" "}
+          Extra details from{" "}
+          <code className="font-mono bg-white/[0.08] px-2 py-1 rounded">
+            /api/users/details
           </code>
         </p>
       </div>
