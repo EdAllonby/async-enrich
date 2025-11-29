@@ -31,8 +31,118 @@ interface UsersResponse {
   pagination: Pagination;
 }
 
+interface LeadershipResponse {
+  success: boolean;
+  data: User[];
+}
+
 interface PageProps {
   searchParams: Promise<{ page?: string }>;
+}
+
+// Reusable User Card component
+function UserCard({ user }: { user: User }) {
+  return (
+    <div className="bg-white/[0.03] border border-white/[0.08] rounded-xl p-4 flex items-start gap-3 transition-all duration-300 backdrop-blur-sm hover:-translate-y-0.5 hover:border-indigo-400/40 hover:shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
+      <div className="shrink-0">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={user.avatar}
+          alt={`${user.name}'s avatar`}
+          className="w-12 h-12 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600"
+        />
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 mb-0.5">
+          <h2 className="text-base font-semibold text-gray-50">{user.name}</h2>
+          {/* Age loads asynchronously after initial render */}
+          <UserAge userId={user.id} />
+        </div>
+        <p className="text-xs text-indigo-400 font-medium mb-1">{user.role}</p>
+        <p className="text-xs text-gray-400 overflow-hidden text-ellipsis whitespace-nowrap mb-1">
+          {user.email}
+        </p>
+        {/* Location loads asynchronously after initial render */}
+        <UserLocation userId={user.id} />
+      </div>
+      <div className="text-xs text-gray-500 font-mono">#{user.id}</div>
+    </div>
+  );
+}
+
+// Leadership Team section - fetched from /api/users/leadership
+async function LeadershipTeam() {
+  const response = await fetch("http://localhost:3001/api/users/leadership", {
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch leadership team");
+  }
+
+  const result: LeadershipResponse = await response.json();
+  const leaders = result.data;
+
+  // Get all leadership user IDs for the extra details fetch
+  const leaderIds = leaders.map((u) => u.id);
+
+  return (
+    <>
+      {/* Prefetch extra details for leadership - shares cache with UsersList */}
+      <UserExtraDetailsProvider userIds={leaderIds} />
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
+        {leaders.map((user) => (
+          <div
+            key={user.id}
+            className="bg-gradient-to-br from-amber-500/10 to-orange-500/5 border border-amber-500/20 rounded-xl p-4 flex flex-col items-center text-center transition-all duration-300 backdrop-blur-sm hover:-translate-y-1 hover:border-amber-400/40 hover:shadow-[0_10px_30px_rgba(245,158,11,0.15)]"
+          >
+            <div className="mb-3 relative">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={user.avatar}
+                alt={`${user.name}'s avatar`}
+                className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 ring-2 ring-amber-500/30"
+              />
+              <span className="absolute -bottom-1 -right-1 w-5 h-5 bg-amber-500 rounded-full flex items-center justify-center text-[10px]">
+                ⭐
+              </span>
+            </div>
+            <h3 className="text-sm font-semibold text-gray-50 mb-0.5">
+              {user.name}
+            </h3>
+            <p className="text-xs text-amber-400 font-medium mb-2">
+              {user.role}
+            </p>
+            <div className="flex items-center gap-2 text-xs">
+              <UserAge userId={user.id} />
+              <span className="text-gray-600">•</span>
+              <UserLocation userId={user.id} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+
+// Loading skeleton for Leadership section
+function LeadershipLoading() {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div
+          key={i}
+          className="bg-gradient-to-br from-amber-500/5 to-orange-500/5 border border-amber-500/10 rounded-xl p-4 flex flex-col items-center animate-pulse"
+        >
+          <div className="w-16 h-16 rounded-full bg-white/10 mb-3" />
+          <div className="h-4 bg-white/10 rounded w-24 mb-2" />
+          <div className="h-3 bg-white/10 rounded w-20 mb-2" />
+          <div className="h-3 bg-white/10 rounded w-28" />
+        </div>
+      ))}
+    </div>
+  );
 }
 
 // This is an async Server Component that fetches data on the server
@@ -60,37 +170,7 @@ async function UsersList({ page }: { page: number }) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto mb-8">
         {users.map((user) => (
-          <div
-            key={user.id}
-            className="bg-white/[0.03] border border-white/[0.08] rounded-xl p-4 flex items-start gap-3 transition-all duration-300 backdrop-blur-sm hover:-translate-y-0.5 hover:border-indigo-400/40 hover:shadow-[0_10px_30px_rgba(0,0,0,0.3)]"
-          >
-            <div className="shrink-0">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={user.avatar}
-                alt={`${user.name}'s avatar`}
-                className="w-12 h-12 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600"
-              />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-0.5">
-                <h2 className="text-base font-semibold text-gray-50">
-                  {user.name}
-                </h2>
-                {/* Age loads asynchronously after initial render */}
-                <UserAge userId={user.id} />
-              </div>
-              <p className="text-xs text-indigo-400 font-medium mb-1">
-                {user.role}
-              </p>
-              <p className="text-xs text-gray-400 overflow-hidden text-ellipsis whitespace-nowrap mb-1">
-                {user.email}
-              </p>
-              {/* Location loads asynchronously after initial render */}
-              <UserLocation userId={user.id} />
-            </div>
-            <div className="text-xs text-gray-500 font-mono">#{user.id}</div>
-          </div>
+          <UserCard key={user.id} user={user} />
         ))}
       </div>
 
@@ -248,13 +328,46 @@ export default async function UsersPage({ searchParams }: PageProps) {
         </p>
         <div className="inline-flex items-center gap-2 bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 px-3 py-1.5 rounded-full text-xs font-medium">
           <span className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-pulse" />
-          RSC + Async Client Enrichment
+          RSC + Shared React Query Cache
         </div>
       </div>
 
-      <Suspense fallback={<UsersLoading />}>
-        <UsersList page={page} />
-      </Suspense>
+      {/* Leadership Team Section */}
+      <section className="mb-16">
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-bold text-gray-100 mb-2 flex items-center justify-center gap-2">
+            <span className="text-amber-400">★</span>
+            Leadership Team
+            <span className="text-amber-400">★</span>
+          </h2>
+          <p className="text-gray-500 text-sm">
+            Our managers and product leaders
+          </p>
+        </div>
+        <Suspense fallback={<LeadershipLoading />}>
+          <LeadershipTeam />
+        </Suspense>
+      </section>
+
+      {/* Divider */}
+      <div className="max-w-4xl mx-auto mb-12">
+        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      </div>
+
+      {/* Team Directory Section */}
+      <section>
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-bold text-gray-100 mb-2">
+            All Team Members
+          </h2>
+          <p className="text-gray-500 text-sm">
+            Browse our full team directory
+          </p>
+        </div>
+        <Suspense fallback={<UsersLoading />}>
+          <UsersList page={page} />
+        </Suspense>
+      </section>
 
       <div className="text-center mt-10 text-gray-500 text-xs">
         <p>
@@ -262,10 +375,16 @@ export default async function UsersPage({ searchParams }: PageProps) {
           <code className="font-mono bg-white/[0.08] px-2 py-1 rounded">
             /api/users
           </code>{" "}
-          &bull; Extra details from{" "}
+          +{" "}
+          <code className="font-mono bg-white/[0.08] px-2 py-1 rounded">
+            /api/users/leadership
+          </code>
+          <br />
+          Extra details from{" "}
           <code className="font-mono bg-white/[0.08] px-2 py-1 rounded">
             /api/users/details
-          </code>
+          </code>{" "}
+          (shared cache)
         </p>
       </div>
     </main>

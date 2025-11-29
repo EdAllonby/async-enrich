@@ -178,6 +178,25 @@ usersRouter.get("/", (req, res) => {
   }, 300);
 });
 
+// GET /api/users/leadership - Get leadership team members
+usersRouter.get("/leadership", (_req, res) => {
+  // Leadership roles that define the leadership team
+  const leadershipRoles = ["Engineering Manager", "Product Manager"];
+
+  // Filter users who are in leadership positions
+  const leadershipUsers = users.filter((user) =>
+    leadershipRoles.includes(user.role)
+  );
+
+  // Simulate network latency
+  setTimeout(() => {
+    res.json({
+      success: true,
+      data: leadershipUsers,
+    });
+  }, 200);
+});
+
 // GET /api/users/:id - Get user by ID
 usersRouter.get("/:id", (req, res) => {
   const id = parseInt(req.params.id ?? "", 10);
