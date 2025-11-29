@@ -68,4 +68,3 @@ export function useUserDetailsFromCache(userId: number): ExtraDetails | null {
 
   return getCachedData();
 }
-

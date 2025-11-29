@@ -41,7 +41,9 @@ export default function Home() {
           className="group flex flex-col items-center gap-3 bg-white/5 border border-white/10 rounded-2xl p-6 w-56 transition-all hover:bg-emerald-500/10 hover:border-emerald-400/40 hover:shadow-[0_10px_40px_rgba(16,185,129,0.2)]"
         >
           <span className="text-4xl">💻</span>
-          <span className="text-lg font-semibold text-gray-100">Developers</span>
+          <span className="text-lg font-semibold text-gray-100">
+            Developers
+          </span>
           <span className="text-xs text-gray-500 text-center">
             Frontend, Backend, Full Stack, and DevOps engineers
           </span>
