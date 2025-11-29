@@ -180,19 +180,78 @@ usersRouter.get("/", (req, res) => {
 
 // GET /api/users/leadership - Get leadership team members
 usersRouter.get("/leadership", (_req, res) => {
-  // Leadership roles that define the leadership team
   const leadershipRoles = ["Engineering Manager", "Product Manager"];
 
-  // Filter users who are in leadership positions
   const leadershipUsers = users.filter((user) =>
     leadershipRoles.includes(user.role)
   );
 
-  // Simulate network latency
   setTimeout(() => {
     res.json({
       success: true,
       data: leadershipUsers,
+    });
+  }, 200);
+});
+
+// GET /api/users/developers - Get developers
+usersRouter.get("/developers", (req, res) => {
+  const page = Math.max(1, parseInt(req.query.page as string, 10) || 1);
+  const pageSize = Math.min(
+    50,
+    Math.max(1, parseInt(req.query.pageSize as string, 10) || 10)
+  );
+
+  const developerRoles = [
+    "Developer",
+    "Frontend Engineer",
+    "Backend Engineer",
+    "Full Stack Developer",
+    "DevOps Engineer",
+  ];
+
+  const developerUsers = users.filter((user) =>
+    developerRoles.includes(user.role)
+  );
+
+  const totalItems = developerUsers.length;
+  const totalPages = Math.ceil(totalItems / pageSize);
+  const currentPage = Math.min(page, totalPages);
+
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const paginatedDevelopers = developerUsers.slice(startIndex, endIndex);
+
+  setTimeout(() => {
+    res.json({
+      success: true,
+      data: paginatedDevelopers,
+      pagination: {
+        currentPage,
+        pageSize,
+        totalItems,
+        totalPages,
+        hasNextPage: currentPage < totalPages,
+        hasPrevPage: currentPage > 1,
+      },
+    });
+  }, 300);
+});
+
+// GET /api/users/random - Get random users
+usersRouter.get("/random", (req, res) => {
+  const count = Math.min(
+    20,
+    Math.max(1, parseInt(req.query.count as string, 10) || 10)
+  );
+
+  const shuffled = [...users].sort(() => Math.random() - 0.5);
+  const randomUsers = shuffled.slice(0, count);
+
+  setTimeout(() => {
+    res.json({
+      success: true,
+      data: randomUsers,
     });
   }, 200);
 });

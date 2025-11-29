@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { PageNav } from "../components/page-nav";
 import { LeadershipTeam, LeadershipLoading } from "./leadership-team";
 import { UsersList, UsersLoading } from "./users-list";
 
@@ -27,6 +28,8 @@ export default async function UsersPage({
           RSC + Shared React Query Cache
         </div>
       </div>
+
+      <PageNav current="users" />
 
       <section className="mb-16">
         <div className="text-center mb-6">
