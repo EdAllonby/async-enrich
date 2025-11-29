@@ -32,7 +32,7 @@ export function LeadershipLoading() {
       {Array.from({ length: 4 }).map((_, i) => (
         <div
           key={i}
-          className="bg-gradient-to-br from-amber-500/5 to-orange-500/5 border border-amber-500/10 rounded-xl p-4 flex flex-col items-center animate-pulse"
+          className="bg-linear-to-br from-amber-500/5 to-orange-500/5 border border-amber-500/10 rounded-xl p-4 flex flex-col items-center animate-pulse"
         >
           <div className="w-16 h-16 rounded-full bg-white/10 mb-3" />
           <div className="h-4 bg-white/10 rounded w-24 mb-2" />

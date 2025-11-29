@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import {
   UserAge,
   UserLocation,
@@ -11,12 +12,14 @@ export function UserCard({ user }: { user: User }) {
   const details = useUserDetailsFromCache(user.id);
 
   return (
-    <div className="bg-white/[0.03] border border-white/[0.08] rounded-xl p-4 flex items-start gap-3 transition-all duration-300 backdrop-blur-sm hover:-translate-y-0.5 hover:border-indigo-400/40 hover:shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
+    <div className="bg-white/3 border border-white/8 rounded-xl p-4 flex items-start gap-3 transition-all duration-300 backdrop-blur-sm hover:-translate-y-0.5 hover:border-indigo-400/40 hover:shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
       <div className="shrink-0">
-        <img
+        <Image
           src={user.avatar}
           alt={`${user.name}'s avatar`}
-          className="w-12 h-12 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600"
+          width={48}
+          height={48}
+          className="w-12 h-12 rounded-lg bg-linear-to-br from-indigo-500 to-purple-600"
         />
       </div>
       <div className="flex-1 min-w-0">

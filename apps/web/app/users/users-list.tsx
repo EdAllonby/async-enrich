@@ -37,7 +37,7 @@ export function UsersLoading() {
         {Array.from({ length: 10 }).map((_, i) => (
           <div
             key={i}
-            className="bg-white/[0.03] border border-white/[0.08] rounded-xl p-4 flex items-start gap-3 animate-pulse"
+            className="bg-white/3 border border-white/8 rounded-xl p-4 flex items-start gap-3 animate-pulse"
           >
             <div className="shrink-0">
               <div className="w-12 h-12 rounded-lg bg-white/10" />

@@ -42,12 +42,12 @@ export function PaginationControls({ pagination }: { pagination: Pagination }) {
         {hasPrevPage ? (
           <Link
             href={`/users?page=${currentPage - 1}`}
-            className="px-3 py-2 rounded-lg bg-white/[0.05] border border-white/[0.1] text-gray-300 hover:bg-white/[0.1] hover:border-indigo-400/50 transition-all text-sm font-medium"
+            className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 hover:border-indigo-400/50 transition-all text-sm font-medium"
           >
             ← Prev
           </Link>
         ) : (
-          <span className="px-3 py-2 rounded-lg bg-white/[0.02] border border-white/[0.05] text-gray-600 text-sm font-medium cursor-not-allowed">
+          <span className="px-3 py-2 rounded-lg bg-white/2 border border-white/5 text-gray-600 text-sm font-medium cursor-not-allowed">
             ← Prev
           </span>
         )}
@@ -65,7 +65,7 @@ export function PaginationControls({ pagination }: { pagination: Pagination }) {
                 className={`w-10 h-10 flex items-center justify-center rounded-lg text-sm font-medium transition-all ${
                   pageNum === currentPage
                     ? "bg-indigo-500 text-white shadow-lg shadow-indigo-500/30"
-                    : "bg-white/[0.05] border border-white/[0.1] text-gray-300 hover:bg-white/[0.1] hover:border-indigo-400/50"
+                    : "bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 hover:border-indigo-400/50"
                 }`}
               >
                 {pageNum}
@@ -77,12 +77,12 @@ export function PaginationControls({ pagination }: { pagination: Pagination }) {
         {hasNextPage ? (
           <Link
             href={`/users?page=${currentPage + 1}`}
-            className="px-3 py-2 rounded-lg bg-white/[0.05] border border-white/[0.1] text-gray-300 hover:bg-white/[0.1] hover:border-indigo-400/50 transition-all text-sm font-medium"
+            className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 hover:border-indigo-400/50 transition-all text-sm font-medium"
           >
             Next →
           </Link>
         ) : (
-          <span className="px-3 py-2 rounded-lg bg-white/[0.02] border border-white/[0.05] text-gray-600 text-sm font-medium cursor-not-allowed">
+          <span className="px-3 py-2 rounded-lg bg-white/2 border border-white/5 text-gray-600 text-sm font-medium cursor-not-allowed">
             Next →
           </span>
         )}

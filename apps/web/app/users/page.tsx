@@ -11,9 +11,9 @@ export default async function UsersPage({
   const page = Math.max(1, parseInt(params.page ?? "1", 10));
 
   return (
-    <main className="min-h-screen py-12 px-6 bg-gradient-to-br from-[#0f0f23] via-[#1a1a2e] to-[#16213e] font-sans">
+    <main className="min-h-screen py-12 px-6 bg-linear-to-br from-[#0f0f23] via-[#1a1a2e] to-[#16213e] font-sans">
       <div className="text-center mb-10">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent mb-3 tracking-tight">
+        <h1 className="text-4xl font-bold bg-linear-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent mb-3 tracking-tight">
           Team Directory
         </h1>
         <p className="text-gray-400 text-base max-w-xl mx-auto mb-4 leading-relaxed">
@@ -45,7 +45,7 @@ export default async function UsersPage({
       </section>
 
       <div className="max-w-4xl mx-auto mb-12">
-        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div className="h-px bg-linear-to-r from-transparent via-white/10 to-transparent" />
       </div>
 
       <section>
@@ -65,16 +65,16 @@ export default async function UsersPage({
       <div className="text-center mt-10 text-gray-500 text-xs">
         <p>
           Initial data from{" "}
-          <code className="font-mono bg-white/[0.08] px-2 py-1 rounded">
+          <code className="font-mono bg-white/8 px-2 py-1 rounded">
             /api/users
           </code>{" "}
           +{" "}
-          <code className="font-mono bg-white/[0.08] px-2 py-1 rounded">
+          <code className="font-mono bg-white/8 px-2 py-1 rounded">
             /api/users/leadership
           </code>
           <br />
           Extra details from{" "}
-          <code className="font-mono bg-white/[0.08] px-2 py-1 rounded">
+          <code className="font-mono bg-white/8 px-2 py-1 rounded">
             /api/users/details
           </code>{" "}
           (shared cache)

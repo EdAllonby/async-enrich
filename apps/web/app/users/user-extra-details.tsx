@@ -57,33 +57,22 @@ export function UserDetailsLoader({
 
 export function useUserDetailsFromCache(userId: number): ExtraDetails | null {
   const queryClient = useQueryClient();
-  const [details, setDetails] = useState<ExtraDetails | null>(
-    () =>
-      queryClient.getQueryData<ExtraDetails>(["userDetails", userId]) ?? null
-  );
+  const queryKey = ["userDetails", userId];
+
+  const getCachedData = () =>
+    queryClient.getQueryData<ExtraDetails>(queryKey) ?? null;
+
+  const [, forceUpdate] = useState({});
 
   useEffect(() => {
-    const queryKey = ["userDetails", userId];
-
-    const unsubscribe = queryClient.getQueryCache().subscribe((event) => {
-      if (
-        event?.query?.queryKey[0] === queryKey[0] &&
-        event?.query?.queryKey[1] === queryKey[1]
-      ) {
-        const cached = queryClient.getQueryData<ExtraDetails>(queryKey);
-        setDetails(cached ?? null);
-      }
+    const unsubscribe = queryClient.getQueryCache().subscribe(() => {
+      forceUpdate({});
     });
 
-    const current = queryClient.getQueryData<ExtraDetails>(queryKey);
-    if (current !== details) {
-      setDetails(current ?? null);
-    }
-
     return unsubscribe;
-  }, [queryClient, userId, details]);
+  }, [queryClient]);
 
-  return details;
+  return getCachedData();
 }
 
 export function UserAge({ details }: { details: ExtraDetails | null }) {
