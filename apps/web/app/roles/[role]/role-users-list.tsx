@@ -7,11 +7,14 @@ import { CardGridSkeleton } from "@/components/ui/card-grid-skeleton";
 
 export async function RoleUsersList({
   role,
-  page,
+  searchParams,
 }: {
   role: string;
-  page: number;
+  searchParams: Promise<{ page?: string }>;
 }) {
+  const params = await searchParams;
+  const page = Math.max(1, parseInt(params.page ?? "1", 10));
+
   const response = await fetch(
     `${env.NEXT_PUBLIC_API_URL}/api/users/role/${encodeURIComponent(role)}?page=${page}&pageSize=10`,
     { cache: "no-store" }

@@ -10,9 +10,6 @@ export default async function UsersPage({
 }: {
   searchParams: Promise<{ page?: string }>;
 }) {
-  const params = await searchParams;
-  const page = Math.max(1, parseInt(params.page ?? "1", 10));
-
   return (
     <main className="min-h-screen py-16 px-6 bg-background font-sans">
       <div className="max-w-6xl mx-auto">
@@ -68,7 +65,7 @@ export default async function UsersPage({
             </p>
           </div>
           <Suspense fallback={<UsersLoading />}>
-            <UsersList page={page} />
+            <UsersList searchParams={searchParams} />
           </Suspense>
         </section>
 

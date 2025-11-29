@@ -14,8 +14,6 @@ export default async function RolePage({
 }) {
   const { role: encodedRole } = await params;
   const role = decodeURIComponent(encodedRole);
-  const { page: pageParam } = await searchParams;
-  const page = Math.max(1, parseInt(pageParam ?? "1", 10));
 
   const config = getRoleConfig(role);
   if (!config) {
@@ -50,7 +48,7 @@ export default async function RolePage({
 
         <section>
           <Suspense fallback={<RoleUsersLoading />}>
-            <RoleUsersList role={role} page={page} />
+            <RoleUsersList role={role} searchParams={searchParams} />
           </Suspense>
         </section>
 

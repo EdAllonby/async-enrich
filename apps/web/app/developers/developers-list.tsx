@@ -1,3 +1,4 @@
+import { unstable_noStore } from "next/cache";
 import { env } from "@/lib/env";
 import type { UsersResponse } from "@/lib/types";
 import { UserDetailsLoader } from "@/lib/user-details";
@@ -5,7 +6,15 @@ import { UserCardWrapper } from "@/components/ui/user-card-wrapper";
 import { Pagination } from "@/components/ui/pagination";
 import { CardGridSkeleton } from "@/components/ui/card-grid-skeleton";
 
-export async function DevelopersList({ page }: { page: number }) {
+export async function DevelopersList({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  unstable_noStore();
+  const params = await searchParams;
+  const page = Math.max(1, parseInt(params.page ?? "1", 10));
+
   const response = await fetch(
     `${env.NEXT_PUBLIC_API_URL}/api/users/developers?page=${page}&pageSize=10`,
     { cache: "no-store" }
