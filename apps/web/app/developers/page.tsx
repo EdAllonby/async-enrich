@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import { PageNav } from "../components/page-nav";
 import { DevelopersList, DevelopersLoading } from "./developers-list";
 
@@ -13,6 +14,12 @@ export default async function DevelopersPage({
   return (
     <main className="min-h-screen py-12 px-6 bg-linear-to-br from-[#0f1f0f] via-[#1a2e1a] to-[#16213e] font-sans">
       <div className="text-center mb-10">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-gray-400 hover:text-white text-sm mb-6 transition-colors"
+        >
+          ← Back to Home
+        </Link>
         <h1 className="text-4xl font-bold bg-linear-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent mb-3 tracking-tight">
           Developer Directory
         </h1>

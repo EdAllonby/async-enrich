@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import { PageNav } from "../components/page-nav";
 import { LeadershipTeam, LeadershipLoading } from "./leadership-team";
 import { UsersList, UsersLoading } from "./users-list";
@@ -14,6 +15,12 @@ export default async function UsersPage({
   return (
     <main className="min-h-screen py-12 px-6 bg-linear-to-br from-[#0f0f23] via-[#1a1a2e] to-[#16213e] font-sans">
       <div className="text-center mb-10">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-gray-400 hover:text-white text-sm mb-6 transition-colors"
+        >
+          ← Back to Home
+        </Link>
         <h1 className="text-4xl font-bold bg-linear-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent mb-3 tracking-tight">
           Team Directory
         </h1>
