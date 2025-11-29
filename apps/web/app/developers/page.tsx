@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { PageNav } from "../components/page-nav";
+import { PageNav } from "@/components/page-nav";
 import { DevelopersList, DevelopersLoading } from "./developers-list";
 
 export default async function DevelopersPage({
@@ -26,7 +26,8 @@ export default async function DevelopersPage({
         <p className="text-gray-400 text-base max-w-xl mx-auto mb-4 leading-relaxed">
           Our engineering talent. Extra details like{" "}
           <span className="text-emerald-400">age</span> and{" "}
-          <span className="text-gray-300">location</span> are shared across pages.
+          <span className="text-gray-300">location</span> are shared across
+          pages.
         </p>
         <div className="inline-flex items-center gap-2 bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 px-3 py-1.5 rounded-full text-xs font-medium">
           <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
@@ -69,4 +70,3 @@ export default async function DevelopersPage({
     </main>
   );
 }
-

@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { RoleUsersList, RoleUsersLoading } from "./role-users-list";
-import { getRoleConfig, formatRoleName } from "../../lib/roles";
+import { getRoleConfig, formatRoleName } from "@/lib/roles";
 import { notFound } from "next/navigation";
 
 export default async function RolePage({

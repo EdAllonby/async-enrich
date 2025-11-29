@@ -1,8 +1,8 @@
-import { env } from "../lib/env";
-import type { RandomUsersResponse } from "../lib/types";
-import { UserDetailsLoader } from "../lib/user-details";
-import { UserCardWrapper } from "./ui/user-card-wrapper";
-import { CardGridSkeleton } from "./ui/card-grid-skeleton";
+import { env } from "@/lib/env";
+import type { RandomUsersResponse } from "@/lib/types";
+import { UserDetailsLoader } from "@/lib/user-details";
+import { UserCardWrapper } from "@/components/ui/user-card-wrapper";
+import { CardGridSkeleton } from "@/components/ui/card-grid-skeleton";
 
 export async function RandomUsersList() {
   const response = await fetch(

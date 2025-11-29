@@ -1,3 +1,6 @@
+import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+
 type SkeletonVariant = "default" | "compact" | "leadership";
 
 interface CardGridSkeletonProps {
@@ -10,43 +13,41 @@ interface CardGridSkeletonProps {
 
 function DefaultCardSkeleton({ className }: { className?: string }) {
   return (
-    <div
-      className={`bg-white/5 border border-white/10 rounded-xl p-4 flex items-start gap-3 animate-pulse ${className}`}
-    >
-      <div className="shrink-0">
-        <div className="w-12 h-12 rounded-lg bg-white/10" />
-      </div>
-      <div className="flex-1">
-        <div className="h-4 bg-white/10 rounded w-3/4 mb-2" />
-        <div className="h-3 bg-white/10 rounded w-1/2 mb-2" />
-        <div className="h-3 bg-white/10 rounded w-4/5" />
-      </div>
-    </div>
+    <Card className={`bg-white/5 border-white/10 py-4 ${className}`}>
+      <CardContent className="p-0 px-4 flex items-start gap-3">
+        <Skeleton className="w-12 h-12 rounded-lg bg-white/10" />
+        <div className="flex-1 space-y-2">
+          <Skeleton className="h-4 w-3/4 bg-white/10" />
+          <Skeleton className="h-3 w-1/2 bg-white/10" />
+          <Skeleton className="h-3 w-4/5 bg-white/10" />
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 
 function CompactCardSkeleton({ className }: { className?: string }) {
   return (
-    <div
-      className={`bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col items-center animate-pulse ${className}`}
-    >
-      <div className="w-14 h-14 rounded-full bg-white/10 mb-3" />
-      <div className="h-3 bg-white/10 rounded w-20 mb-2" />
-      <div className="h-2 bg-white/10 rounded w-16" />
-    </div>
+    <Card className={`bg-white/5 border-white/10 py-4 ${className}`}>
+      <CardContent className="p-0 flex flex-col items-center">
+        <Skeleton className="w-14 h-14 rounded-full bg-white/10 mb-3" />
+        <Skeleton className="h-3 w-20 bg-white/10 mb-2" />
+        <Skeleton className="h-2 w-16 bg-white/10" />
+      </CardContent>
+    </Card>
   );
 }
 
 function LeadershipCardSkeleton({ className }: { className?: string }) {
   return (
-    <div
-      className={`bg-amber-500/5 border border-amber-500/10 rounded-xl p-4 flex flex-col items-center animate-pulse ${className}`}
-    >
-      <div className="w-16 h-16 rounded-full bg-white/10 mb-3" />
-      <div className="h-3 bg-white/10 rounded w-24 mb-2" />
-      <div className="h-2 bg-white/10 rounded w-20 mb-2" />
-      <div className="h-2 bg-white/10 rounded w-28" />
-    </div>
+    <Card className={`bg-amber-500/5 border-amber-500/10 py-4 ${className}`}>
+      <CardContent className="p-0 flex flex-col items-center">
+        <Skeleton className="w-16 h-16 rounded-full bg-white/10 mb-3" />
+        <Skeleton className="h-3 w-24 bg-white/10 mb-2" />
+        <Skeleton className="h-2 w-20 bg-white/10 mb-2" />
+        <Skeleton className="h-2 w-28 bg-white/10" />
+      </CardContent>
+    </Card>
   );
 }
 
@@ -57,8 +58,9 @@ export function CardGridSkeleton({
   showPagination = true,
   cardClassName,
 }: CardGridSkeletonProps) {
-  const gridCols = columns === 5 ? "grid-cols-2 md:grid-cols-5" : "grid-cols-1 md:grid-cols-2";
-  
+  const gridCols =
+    columns === 5 ? "grid-cols-2 md:grid-cols-5" : "grid-cols-1 md:grid-cols-2";
+
   const CardComponent =
     variant === "compact"
       ? CompactCardSkeleton
@@ -75,7 +77,7 @@ export function CardGridSkeleton({
       </div>
       {showPagination && (
         <div className="flex justify-center">
-          <div className="h-10 bg-white/10 rounded-lg w-64 animate-pulse" />
+          <Skeleton className="h-10 w-64 bg-white/10" />
         </div>
       )}
     </>
@@ -91,4 +93,3 @@ export function LeadershipSkeleton({ count = 4 }: { count?: number }) {
     </div>
   );
 }
-

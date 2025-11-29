@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { PageNav } from "../components/page-nav";
+import { PageNav } from "@/components/page-nav";
 import { LeadershipTeam, LeadershipLoading } from "./leadership-team";
 import { UsersList, UsersLoading } from "./users-list";
 

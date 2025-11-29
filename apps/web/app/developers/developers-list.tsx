@@ -1,9 +1,9 @@
-import { env } from "../lib/env";
-import type { UsersResponse } from "../lib/types";
-import { UserDetailsLoader } from "../lib/user-details";
-import { UserCardWrapper } from "../components/ui/user-card-wrapper";
-import { Pagination } from "../components/ui/pagination";
-import { CardGridSkeleton } from "../components/ui/card-grid-skeleton";
+import { env } from "@/lib/env";
+import type { UsersResponse } from "@/lib/types";
+import { UserDetailsLoader } from "@/lib/user-details";
+import { UserCardWrapper } from "@/components/ui/user-card-wrapper";
+import { Pagination } from "@/components/ui/pagination";
+import { CardGridSkeleton } from "@/components/ui/card-grid-skeleton";
 
 export async function DevelopersList({ page }: { page: number }) {
   const response = await fetch(

@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 // Validate env at build time
-import "./app/lib/env";
+import "@/lib/env";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,

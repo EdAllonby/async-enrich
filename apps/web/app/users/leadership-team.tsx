@@ -1,8 +1,8 @@
-import { env } from "../lib/env";
-import type { LeadershipResponse } from "../lib/types";
-import { UserDetailsLoader } from "../lib/user-details";
-import { UserCardWrapper } from "../components/ui/user-card-wrapper";
-import { LeadershipSkeleton } from "../components/ui/card-grid-skeleton";
+import { env } from "@/lib/env";
+import type { LeadershipResponse } from "@/lib/types";
+import { UserDetailsLoader } from "@/lib/user-details";
+import { UserCardWrapper } from "@/components/ui/user-card-wrapper";
+import { LeadershipSkeleton } from "@/components/ui/card-grid-skeleton";
 
 export async function LeadershipTeam() {
   const response = await fetch(`${env.NEXT_PUBLIC_API_URL}/api/users/leadership`, {

@@ -1,8 +1,8 @@
 "use client";
 
-import { useUserDetailsFromCache } from "../../lib/user-details";
+import { useUserDetailsFromCache } from "@/lib/user-details";
 import { UserCard } from "./user-card";
-import type { User } from "../../lib/types";
+import type { User } from "@/lib/types";
 
 type CardVariant = "default" | "compact" | "leadership";
 type AccentColor =
