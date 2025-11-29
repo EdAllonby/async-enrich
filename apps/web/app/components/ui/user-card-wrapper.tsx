@@ -6,10 +6,9 @@ import type { User } from "@/lib/types";
 
 type CardVariant = "default" | "compact" | "leadership";
 type AccentColor =
-  | "indigo"
-  | "emerald"
-  | "amber"
-  | "purple"
+  | "neutral"
+  | "warm"
+  | "cool"
   | "gray"
   | "white";
 
@@ -24,7 +23,7 @@ interface UserCardWrapperProps {
 export function UserCardWrapper({
   user,
   variant = "default",
-  accentColor = "indigo",
+  accentColor = "neutral",
   showEmail = true,
   showId = true,
 }: UserCardWrapperProps) {

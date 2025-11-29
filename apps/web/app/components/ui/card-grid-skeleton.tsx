@@ -13,13 +13,13 @@ interface CardGridSkeletonProps {
 
 function DefaultCardSkeleton({ className }: { className?: string }) {
   return (
-    <Card className={`bg-white/5 border-white/10 py-4 ${className}`}>
+    <Card className={`bg-card border-border py-4 ${className}`}>
       <CardContent className="p-0 px-4 flex items-start gap-3">
-        <Skeleton className="w-12 h-12 rounded-lg bg-white/10" />
+        <Skeleton className="w-12 h-12 rounded-lg bg-muted" />
         <div className="flex-1 space-y-2">
-          <Skeleton className="h-4 w-3/4 bg-white/10" />
-          <Skeleton className="h-3 w-1/2 bg-white/10" />
-          <Skeleton className="h-3 w-4/5 bg-white/10" />
+          <Skeleton className="h-4 w-3/4 bg-muted" />
+          <Skeleton className="h-3 w-1/2 bg-muted" />
+          <Skeleton className="h-3 w-4/5 bg-muted" />
         </div>
       </CardContent>
     </Card>
@@ -28,11 +28,11 @@ function DefaultCardSkeleton({ className }: { className?: string }) {
 
 function CompactCardSkeleton({ className }: { className?: string }) {
   return (
-    <Card className={`bg-white/5 border-white/10 py-4 ${className}`}>
+    <Card className={`bg-card border-border py-4 ${className}`}>
       <CardContent className="p-0 flex flex-col items-center">
-        <Skeleton className="w-14 h-14 rounded-full bg-white/10 mb-3" />
-        <Skeleton className="h-3 w-20 bg-white/10 mb-2" />
-        <Skeleton className="h-2 w-16 bg-white/10" />
+        <Skeleton className="w-14 h-14 rounded-full bg-muted mb-3" />
+        <Skeleton className="h-3 w-20 bg-muted mb-2" />
+        <Skeleton className="h-2 w-16 bg-muted" />
       </CardContent>
     </Card>
   );
@@ -40,12 +40,12 @@ function CompactCardSkeleton({ className }: { className?: string }) {
 
 function LeadershipCardSkeleton({ className }: { className?: string }) {
   return (
-    <Card className={`bg-amber-500/5 border-amber-500/10 py-4 ${className}`}>
+    <Card className={`bg-card border-border py-4 ${className}`}>
       <CardContent className="p-0 flex flex-col items-center">
-        <Skeleton className="w-16 h-16 rounded-full bg-white/10 mb-3" />
-        <Skeleton className="h-3 w-24 bg-white/10 mb-2" />
-        <Skeleton className="h-2 w-20 bg-white/10 mb-2" />
-        <Skeleton className="h-2 w-28 bg-white/10" />
+        <Skeleton className="w-16 h-16 rounded-full bg-muted mb-3" />
+        <Skeleton className="h-3 w-24 bg-muted mb-2" />
+        <Skeleton className="h-2 w-20 bg-muted mb-2" />
+        <Skeleton className="h-2 w-28 bg-muted" />
       </CardContent>
     </Card>
   );
@@ -77,7 +77,7 @@ export function CardGridSkeleton({
       </div>
       {showPagination && (
         <div className="flex justify-center">
-          <Skeleton className="h-10 w-64 bg-white/10" />
+          <Skeleton className="h-10 w-64 bg-muted" />
         </div>
       )}
     </>

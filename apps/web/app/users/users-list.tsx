@@ -24,13 +24,13 @@ export async function UsersList({ page }: { page: number }) {
     <UserDetailsLoader userIds={userIds}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto mb-8">
         {users.map((user) => (
-          <UserCardWrapper key={user.id} user={user} accentColor="indigo" />
+          <UserCardWrapper key={user.id} user={user} accentColor="neutral" />
         ))}
       </div>
       <Pagination
         pagination={pagination}
         baseUrl="/users"
-        accentColor="indigo"
+        accentColor="neutral"
         label="users"
       />
     </UserDetailsLoader>

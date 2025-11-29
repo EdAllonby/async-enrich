@@ -29,7 +29,7 @@ export async function RandomUsersList() {
             key={user.id}
             user={user}
             variant="compact"
-            accentColor="purple"
+            accentColor="neutral"
             showEmail={false}
             showId={false}
           />

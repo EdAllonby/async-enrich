@@ -26,7 +26,7 @@ export async function LeadershipTeam() {
             <UserCardWrapper
               user={leader}
               variant="leadership"
-              accentColor="amber"
+              accentColor="neutral"
               showEmail={false}
               showId={false}
             />

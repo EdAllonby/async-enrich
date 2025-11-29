@@ -27,14 +27,14 @@ export async function DevelopersList({ page }: { page: number }) {
           <UserCardWrapper
             key={developer.id}
             user={developer}
-            accentColor="emerald"
+            accentColor="neutral"
           />
         ))}
       </div>
       <Pagination
         pagination={pagination}
         baseUrl="/developers"
-        accentColor="emerald"
+        accentColor="neutral"
         label="developers"
       />
     </UserDetailsLoader>
@@ -47,7 +47,7 @@ export function DevelopersLoading() {
       count={10}
       columns={2}
       variant="default"
-      cardClassName="bg-emerald-500/5 border-emerald-500/10"
+      cardClassName="bg-card border-border"
     />
   );
 }

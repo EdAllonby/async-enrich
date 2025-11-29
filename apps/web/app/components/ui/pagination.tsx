@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import type { Pagination as PaginationType } from "@/lib/types";
 
-type AccentColor = "indigo" | "emerald" | "white";
+type AccentColor = "neutral" | "warm" | "cool";
 
 const colorStyles: Record<
   AccentColor,
@@ -11,17 +11,17 @@ const colorStyles: Record<
     active: string;
   }
 > = {
-  indigo: {
-    text: "text-indigo-400",
-    active: "bg-indigo-500 text-white shadow-lg shadow-indigo-500/30",
+  neutral: {
+    text: "text-foreground",
+    active: "bg-foreground text-background shadow-md",
   },
-  emerald: {
-    text: "text-emerald-400",
-    active: "bg-emerald-500 text-white shadow-lg shadow-emerald-500/30",
+  warm: {
+    text: "text-foreground",
+    active: "bg-foreground text-background shadow-md",
   },
-  white: {
-    text: "text-white",
-    active: "bg-white/20 text-white shadow-lg",
+  cool: {
+    text: "text-foreground",
+    active: "bg-foreground text-background shadow-md",
   },
 };
 
@@ -35,7 +35,7 @@ interface PaginationProps {
 export function Pagination({
   pagination,
   baseUrl,
-  accentColor = "indigo",
+  accentColor = "neutral",
   label = "items",
 }: PaginationProps) {
   const { currentPage, totalPages, totalItems, hasNextPage, hasPrevPage } =
@@ -86,7 +86,7 @@ export function Pagination({
         <Button
           variant="outline"
           size="sm"
-          className="bg-white/5 border-white/10 text-foreground hover:bg-white/10"
+          className="bg-card border-border text-foreground hover:bg-muted"
           disabled={!hasPrevPage}
           asChild={hasPrevPage}
         >
@@ -114,7 +114,7 @@ export function Pagination({
                 className={
                   pageNum === currentPage
                     ? styles.active
-                    : "bg-white/5 border-white/10 text-foreground hover:bg-white/10"
+                    : "bg-card border-border text-foreground hover:bg-muted"
                 }
                 asChild
               >
@@ -127,7 +127,7 @@ export function Pagination({
         <Button
           variant="outline"
           size="sm"
-          className="bg-white/5 border-white/10 text-foreground hover:bg-white/10"
+          className="bg-card border-border text-foreground hover:bg-muted"
           disabled={!hasNextPage}
           asChild={hasNextPage}
         >
