@@ -19,6 +19,7 @@ export function LeadershipCard({ user }: { user: User }) {
           alt={`${user.name}'s avatar`}
           width={64}
           height={64}
+          unoptimized
           className="w-16 h-16 rounded-full bg-linear-to-br from-amber-500 to-orange-600 ring-2 ring-amber-500/30"
         />
         <span className="absolute -bottom-1 -right-1 w-5 h-5 bg-amber-500 rounded-full flex items-center justify-center text-[10px]">

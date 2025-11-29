@@ -19,6 +19,7 @@ export function UserCard({ user }: { user: User }) {
           alt={`${user.name}'s avatar`}
           width={48}
           height={48}
+          unoptimized
           className="w-12 h-12 rounded-lg bg-linear-to-br from-indigo-500 to-purple-600"
         />
       </div>
