@@ -256,6 +256,60 @@ usersRouter.get("/random", (req, res) => {
   }, 200);
 });
 
+// GET /api/users/roles - Get all available roles
+usersRouter.get("/roles", (_req, res) => {
+  res.json({
+    success: true,
+    data: roles,
+  });
+});
+
+// GET /api/users/role/:role - Get users by role
+usersRouter.get("/role/:role", (req, res) => {
+  const role = decodeURIComponent(req.params.role ?? "");
+  const page = Math.max(1, parseInt(req.query.page as string, 10) || 1);
+  const pageSize = Math.min(
+    50,
+    Math.max(1, parseInt(req.query.pageSize as string, 10) || 10)
+  );
+
+  const roleUsers = users.filter(
+    (user) => user.role.toLowerCase() === role.toLowerCase()
+  );
+
+  if (roleUsers.length === 0) {
+    res.status(404).json({
+      success: false,
+      error: `No users found with role: ${role}`,
+    });
+    return;
+  }
+
+  const totalItems = roleUsers.length;
+  const totalPages = Math.ceil(totalItems / pageSize);
+  const currentPage = Math.min(page, totalPages);
+
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const paginatedUsers = roleUsers.slice(startIndex, endIndex);
+
+  setTimeout(() => {
+    res.json({
+      success: true,
+      data: paginatedUsers,
+      role,
+      pagination: {
+        currentPage,
+        pageSize,
+        totalItems,
+        totalPages,
+        hasNextPage: currentPage < totalPages,
+        hasPrevPage: currentPage > 1,
+      },
+    });
+  }, 300);
+});
+
 // GET /api/users/:id - Get user by ID
 usersRouter.get("/:id", (req, res) => {
   const id = parseInt(req.params.id ?? "", 10);

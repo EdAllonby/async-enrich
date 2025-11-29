@@ -2,6 +2,19 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { RandomUsersList, RandomUsersLoading } from "./components/random-users";
 
+const roles = [
+  { name: "Developer", emoji: "👨‍💻", color: "indigo" },
+  { name: "Designer", emoji: "🎨", color: "pink" },
+  { name: "Product Manager", emoji: "📊", color: "amber" },
+  { name: "DevOps Engineer", emoji: "🔧", color: "cyan" },
+  { name: "QA Engineer", emoji: "🔍", color: "violet" },
+  { name: "Data Scientist", emoji: "📈", color: "emerald" },
+  { name: "Frontend Engineer", emoji: "🖥️", color: "sky" },
+  { name: "Backend Engineer", emoji: "⚙️", color: "slate" },
+  { name: "Full Stack Developer", emoji: "🚀", color: "orange" },
+  { name: "Engineering Manager", emoji: "👔", color: "yellow" },
+];
+
 export default function Home() {
   return (
     <main className="min-h-screen py-12 px-6 bg-linear-to-br from-[#0f0f23] via-[#1a1a2e] to-[#16213e] font-sans">
@@ -20,7 +33,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="flex justify-center gap-4 mb-12">
+      <div className="flex justify-center gap-4 mb-10">
         <Link
           href="/users"
           className="group flex flex-col items-center gap-3 bg-white/5 border border-white/10 rounded-2xl p-6 w-56 transition-all hover:bg-indigo-500/10 hover:border-indigo-400/40 hover:shadow-[0_10px_40px_rgba(99,102,241,0.2)]"
@@ -50,6 +63,27 @@ export default function Home() {
         </Link>
       </div>
 
+      <div className="max-w-5xl mx-auto mb-10">
+        <div className="h-px bg-linear-to-r from-transparent via-white/10 to-transparent mb-8" />
+        <h2 className="text-xl font-bold text-gray-100 text-center mb-6">
+          Browse by Role
+        </h2>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+          {roles.map((role) => (
+            <Link
+              key={role.name}
+              href={`/roles/${encodeURIComponent(role.name)}`}
+              className="group flex flex-col items-center gap-2 bg-white/5 border border-white/10 rounded-xl p-4 transition-all hover:bg-white/10 hover:border-white/20 hover:-translate-y-0.5"
+            >
+              <span className="text-2xl">{role.emoji}</span>
+              <span className="text-xs font-medium text-gray-300 text-center leading-tight">
+                {role.name}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </div>
+
       <div className="max-w-4xl mx-auto mb-8">
         <div className="h-px bg-linear-to-r from-transparent via-white/10 to-transparent" />
       </div>
@@ -70,15 +104,8 @@ export default function Home() {
 
       <div className="text-center mt-12 text-gray-500 text-xs">
         <p>
-          Navigate between{" "}
-          <Link href="/users" className="text-indigo-400 hover:underline">
-            /users
-          </Link>{" "}
-          and{" "}
-          <Link href="/developers" className="text-emerald-400 hover:underline">
-            /developers
-          </Link>{" "}
-          to see the shared cache in action
+          Navigate between pages to see the shared cache in action. User details
+          persist across all role pages!
         </p>
       </div>
     </main>
