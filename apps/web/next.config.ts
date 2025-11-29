@@ -5,6 +5,7 @@ import "./app/lib/env";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  cacheComponents: true,
   images: {
     remotePatterns: [
       {
