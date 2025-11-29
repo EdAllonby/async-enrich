@@ -258,6 +258,7 @@ const generateExtraDetails = (userId: number) => {
 // This endpoint simulates a slow enrichment service
 usersRouter.post("/details", (req, res) => {
   const { userIds } = req.body as { userIds?: number[] };
+  console.log("userIds", userIds);
 
   if (!userIds || !Array.isArray(userIds)) {
     res.status(400).json({

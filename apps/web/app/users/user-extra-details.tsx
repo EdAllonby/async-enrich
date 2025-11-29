@@ -1,20 +1,15 @@
 "use client";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
-interface ExtraDetails {
+export interface ExtraDetails {
   userId: number;
   age: number;
   department: string;
   location: string;
   yearsAtCompany: number;
 }
-
-const userDetailsKeys = {
-  all: ["userDetails"] as const,
-  batch: (ids: number[]) => [...userDetailsKeys.all, "batch", ids] as const,
-};
 
 async function fetchUserDetails(userIds: number[]): Promise<ExtraDetails[]> {
   const response = await fetch("http://localhost:3001/api/users/details", {
@@ -29,41 +24,70 @@ async function fetchUserDetails(userIds: number[]): Promise<ExtraDetails[]> {
   return result.data;
 }
 
-export function UserExtraDetailsProvider({ userIds }: { userIds: number[] }) {
+function useBatchUserDetails(userIds: number[]) {
   const queryClient = useQueryClient();
 
-  const { data } = useQuery({
-    queryKey: userDetailsKeys.batch(userIds),
+  const query = useQuery({
+    queryKey: ["userDetails", "batch", userIds],
     queryFn: () => fetchUserDetails(userIds),
     staleTime: 5 * 60 * 1000,
   });
 
   useEffect(() => {
-    if (data) {
-      for (const detail of data) {
-        queryClient.setQueryData(
-          [...userDetailsKeys.all, detail.userId],
-          detail
-        );
+    if (query.data) {
+      for (const detail of query.data) {
+        queryClient.setQueryData(["userDetails", detail.userId], detail);
       }
     }
-  }, [data, queryClient]);
+  }, [query.data, queryClient]);
 
-  return null;
+  return query;
 }
 
-function useUserDetails(userId: number) {
-  return useQuery({
-    queryKey: [...userDetailsKeys.all, userId],
-    queryFn: () => fetchUserDetails([userId]).then((data) => data[0]),
-    staleTime: 5 * 60 * 1000,
-  });
+export function UserDetailsLoader({
+  userIds,
+  children,
+}: {
+  userIds: number[];
+  children: ReactNode;
+}) {
+  useBatchUserDetails(userIds);
+  return children;
 }
 
-export function UserAge({ userId }: { userId: number }) {
-  const { data: details, isLoading } = useUserDetails(userId);
+export function useUserDetailsFromCache(userId: number): ExtraDetails | null {
+  const queryClient = useQueryClient();
+  const [details, setDetails] = useState<ExtraDetails | null>(
+    () =>
+      queryClient.getQueryData<ExtraDetails>(["userDetails", userId]) ?? null
+  );
 
-  if (isLoading || !details) {
+  useEffect(() => {
+    const queryKey = ["userDetails", userId];
+
+    const unsubscribe = queryClient.getQueryCache().subscribe((event) => {
+      if (
+        event?.query?.queryKey[0] === queryKey[0] &&
+        event?.query?.queryKey[1] === queryKey[1]
+      ) {
+        const cached = queryClient.getQueryData<ExtraDetails>(queryKey);
+        setDetails(cached ?? null);
+      }
+    });
+
+    const current = queryClient.getQueryData<ExtraDetails>(queryKey);
+    if (current !== details) {
+      setDetails(current ?? null);
+    }
+
+    return unsubscribe;
+  }, [queryClient, userId, details]);
+
+  return details;
+}
+
+export function UserAge({ details }: { details: ExtraDetails | null }) {
+  if (!details) {
     return (
       <span className="inline-flex items-center gap-1 text-xs text-gray-500">
         <span className="w-6 h-3 bg-white/10 rounded animate-pulse" />
@@ -78,10 +102,8 @@ export function UserAge({ userId }: { userId: number }) {
   );
 }
 
-export function UserLocation({ userId }: { userId: number }) {
-  const { data: details, isLoading } = useUserDetails(userId);
-
-  if (isLoading || !details) {
+export function UserLocation({ details }: { details: ExtraDetails | null }) {
+  if (!details) {
     return (
       <span className="inline-flex items-center text-xs text-gray-500">
         <span className="w-16 h-3 bg-white/10 rounded animate-pulse" />

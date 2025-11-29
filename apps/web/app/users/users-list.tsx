@@ -1,4 +1,4 @@
-import { UserExtraDetailsProvider } from "./user-extra-details";
+import { UserDetailsLoader } from "./user-extra-details";
 import { UserCard } from "./user-card";
 import { PaginationControls } from "./pagination-controls";
 import type { UsersResponse } from "./types";
@@ -19,17 +19,14 @@ export async function UsersList({ page }: { page: number }) {
   const userIds = users.map((u) => u.id);
 
   return (
-    <>
-      <UserExtraDetailsProvider userIds={userIds} />
-
+    <UserDetailsLoader userIds={userIds}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto mb-8">
         {users.map((user) => (
           <UserCard key={user.id} user={user} />
         ))}
       </div>
-
       <PaginationControls pagination={pagination} />
-    </>
+    </UserDetailsLoader>
   );
 }
 
@@ -59,4 +56,3 @@ export function UsersLoading() {
     </>
   );
 }
-
