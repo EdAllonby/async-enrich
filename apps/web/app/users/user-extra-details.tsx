@@ -11,17 +11,11 @@ interface ExtraDetails {
   yearsAtCompany: number;
 }
 
-interface UserExtraDetailsProps {
-  userIds: number[];
-}
-
-// Query key factory
 const userDetailsKeys = {
   all: ["userDetails"] as const,
   batch: (ids: number[]) => [...userDetailsKeys.all, "batch", ids] as const,
 };
 
-// Fetch function for user details
 async function fetchUserDetails(userIds: number[]): Promise<ExtraDetails[]> {
   const response = await fetch("http://localhost:3001/api/users/details", {
     method: "POST",
@@ -35,18 +29,15 @@ async function fetchUserDetails(userIds: number[]): Promise<ExtraDetails[]> {
   return result.data;
 }
 
-// Provider component that triggers the batch fetch and populates cache
-export function UserExtraDetailsProvider({ userIds }: UserExtraDetailsProps) {
+export function UserExtraDetailsProvider({ userIds }: { userIds: number[] }) {
   const queryClient = useQueryClient();
 
-  // Batch fetch all user details
   const { data } = useQuery({
     queryKey: userDetailsKeys.batch(userIds),
     queryFn: () => fetchUserDetails(userIds),
     staleTime: 5 * 60 * 1000,
   });
 
-  // When data arrives, populate individual user caches for faster lookups
   useEffect(() => {
     if (data) {
       for (const detail of data) {
@@ -61,7 +52,6 @@ export function UserExtraDetailsProvider({ userIds }: UserExtraDetailsProps) {
   return null;
 }
 
-// Hook to get details for a single user
 function useUserDetails(userId: number) {
   return useQuery({
     queryKey: [...userDetailsKeys.all, userId],
@@ -70,11 +60,7 @@ function useUserDetails(userId: number) {
   });
 }
 
-interface UserDetailProps {
-  userId: number;
-}
-
-export function UserAge({ userId }: UserDetailProps) {
+export function UserAge({ userId }: { userId: number }) {
   const { data: details, isLoading } = useUserDetails(userId);
 
   if (isLoading || !details) {
@@ -92,7 +78,7 @@ export function UserAge({ userId }: UserDetailProps) {
   );
 }
 
-export function UserLocation({ userId }: UserDetailProps) {
+export function UserLocation({ userId }: { userId: number }) {
   const { data: details, isLoading } = useUserDetails(userId);
 
   if (isLoading || !details) {
