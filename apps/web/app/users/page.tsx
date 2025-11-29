@@ -1,6 +1,10 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { UserExtraDetailsProvider, UserAge, UserLocation } from "./user-extra-details";
+import {
+  UserExtraDetailsProvider,
+  UserAge,
+  UserLocation,
+} from "./user-extra-details";
 
 // Type definitions for our API response
 interface User {
@@ -45,7 +49,7 @@ async function UsersList({ page }: { page: number }) {
 
   const result: UsersResponse = await response.json();
   const { data: users, pagination } = result;
-  
+
   // Get all user IDs for the extra details fetch
   const userIds = users.map((u) => u.id);
 
@@ -53,7 +57,7 @@ async function UsersList({ page }: { page: number }) {
     <>
       {/* Client component that fetches extra details asynchronously */}
       <UserExtraDetailsProvider userIds={userIds} />
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto mb-8">
         {users.map((user) => (
           <div
@@ -85,9 +89,7 @@ async function UsersList({ page }: { page: number }) {
               {/* Location loads asynchronously after initial render */}
               <UserLocation userId={user.id} />
             </div>
-            <div className="text-xs text-gray-500 font-mono">
-              #{user.id}
-            </div>
+            <div className="text-xs text-gray-500 font-mono">#{user.id}</div>
           </div>
         ))}
       </div>
@@ -100,34 +102,35 @@ async function UsersList({ page }: { page: number }) {
 
 // Pagination controls component
 function PaginationControls({ pagination }: { pagination: Pagination }) {
-  const { currentPage, totalPages, totalItems, hasNextPage, hasPrevPage } = pagination;
+  const { currentPage, totalPages, totalItems, hasNextPage, hasPrevPage } =
+    pagination;
 
   // Generate page numbers to display
   const getPageNumbers = () => {
     const pages: (number | "...")[] = [];
     const showPages = 5;
-    
+
     if (totalPages <= showPages + 2) {
       // Show all pages if total is small
       for (let i = 1; i <= totalPages; i++) pages.push(i);
     } else {
       // Always show first page
       pages.push(1);
-      
+
       if (currentPage > 3) pages.push("...");
-      
+
       // Show pages around current
       const start = Math.max(2, currentPage - 1);
       const end = Math.min(totalPages - 1, currentPage + 1);
-      
+
       for (let i = start; i <= end; i++) pages.push(i);
-      
+
       if (currentPage < totalPages - 2) pages.push("...");
-      
+
       // Always show last page
       pages.push(totalPages);
     }
-    
+
     return pages;
   };
 
@@ -135,7 +138,8 @@ function PaginationControls({ pagination }: { pagination: Pagination }) {
     <div className="flex flex-col items-center gap-4 max-w-4xl mx-auto">
       {/* Page info */}
       <p className="text-sm text-gray-400">
-        Showing page <span className="text-indigo-400 font-semibold">{currentPage}</span> of{" "}
+        Showing page{" "}
+        <span className="text-indigo-400 font-semibold">{currentPage}</span> of{" "}
         <span className="text-indigo-400 font-semibold">{totalPages}</span>
         <span className="text-gray-500 ml-2">({totalItems} total users)</span>
       </p>
@@ -237,8 +241,10 @@ export default async function UsersPage({ searchParams }: PageProps) {
           Team Directory
         </h1>
         <p className="text-gray-400 text-base max-w-xl mx-auto mb-4 leading-relaxed">
-          Users load instantly, then <span className="text-emerald-400">age</span> and{" "}
-          <span className="text-gray-300">location</span> are adorned asynchronously.
+          Users load instantly, then{" "}
+          <span className="text-emerald-400">age</span> and{" "}
+          <span className="text-gray-300">location</span> are adorned
+          asynchronously.
         </p>
         <div className="inline-flex items-center gap-2 bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 px-3 py-1.5 rounded-full text-xs font-medium">
           <span className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-pulse" />
@@ -255,9 +261,8 @@ export default async function UsersPage({ searchParams }: PageProps) {
           Initial data from{" "}
           <code className="font-mono bg-white/[0.08] px-2 py-1 rounded">
             /api/users
-          </code>
-          {" "}&bull;{" "}
-          Extra details from{" "}
+          </code>{" "}
+          &bull; Extra details from{" "}
           <code className="font-mono bg-white/[0.08] px-2 py-1 rounded">
             /api/users/details
           </code>

@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 interface ExtraDetails {
   userId: number;
@@ -14,87 +15,69 @@ interface UserExtraDetailsProps {
   userIds: number[];
 }
 
-// Store for extra details - shared across all instances
-const detailsCache = new Map<number, ExtraDetails>();
+// Query key factory
+const userDetailsKeys = {
+  all: ["userDetails"] as const,
+  batch: (ids: number[]) => [...userDetailsKeys.all, "batch", ids] as const,
+};
 
-export function UserExtraDetailsProvider({ userIds }: UserExtraDetailsProps) {
-  const [, setLoaded] = useState(false);
+// Fetch function for user details
+async function fetchUserDetails(userIds: number[]): Promise<ExtraDetails[]> {
+  const response = await fetch("http://localhost:3001/api/users/details", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userIds }),
+  });
 
-  useEffect(() => {
-    // Only fetch IDs we don't already have
-    const idsToFetch = userIds.filter((id) => !detailsCache.has(id));
+  if (!response.ok) throw new Error("Failed to fetch extra details");
 
-    if (idsToFetch.length === 0) {
-      setLoaded(true);
-      return;
-    }
-
-    const fetchDetails = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:3001/api/users/details",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ userIds: idsToFetch }),
-          }
-        );
-
-        if (!response.ok) throw new Error("Failed to fetch extra details");
-
-        const result = await response.json();
-
-        // Cache the results
-        for (const detail of result.data as ExtraDetails[]) {
-          detailsCache.set(detail.userId, detail);
-        }
-
-        // Trigger re-render
-        setLoaded(true);
-      } catch (error) {
-        console.error("Error fetching extra details:", error);
-      }
-    };
-
-    fetchDetails();
-  }, [userIds]);
-
-  return null; // This component just manages the fetch
+  const result = await response.json();
+  return result.data;
 }
 
-interface UserAgeProps {
+// Provider component that triggers the batch fetch and populates cache
+export function UserExtraDetailsProvider({ userIds }: UserExtraDetailsProps) {
+  const queryClient = useQueryClient();
+
+  // Batch fetch all user details
+  const { data } = useQuery({
+    queryKey: userDetailsKeys.batch(userIds),
+    queryFn: () => fetchUserDetails(userIds),
+    staleTime: 5 * 60 * 1000,
+  });
+
+  // When data arrives, populate individual user caches for faster lookups
+  useEffect(() => {
+    if (data) {
+      for (const detail of data) {
+        queryClient.setQueryData(
+          [...userDetailsKeys.all, detail.userId],
+          detail
+        );
+      }
+    }
+  }, [data, queryClient]);
+
+  return null;
+}
+
+// Hook to get details for a single user
+function useUserDetails(userId: number) {
+  return useQuery({
+    queryKey: [...userDetailsKeys.all, userId],
+    queryFn: () => fetchUserDetails([userId]).then((data) => data[0]),
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+interface UserDetailProps {
   userId: number;
 }
 
-export function UserAge({ userId }: UserAgeProps) {
-  const [details, setDetails] = useState<ExtraDetails | null>(
-    detailsCache.get(userId) ?? null
-  );
+export function UserAge({ userId }: UserDetailProps) {
+  const { data: details, isLoading } = useUserDetails(userId);
 
-  useEffect(() => {
-    // Check cache on mount and set up polling for updates
-    const checkCache = () => {
-      const cached = detailsCache.get(userId);
-      if (cached && !details) {
-        setDetails(cached);
-      }
-    };
-
-    checkCache();
-
-    // Poll for cache updates (in case fetch completes after mount)
-    const interval = setInterval(checkCache, 100);
-
-    // Clean up after 5 seconds (details should be loaded by then)
-    const timeout = setTimeout(() => clearInterval(interval), 5000);
-
-    return () => {
-      clearInterval(interval);
-      clearTimeout(timeout);
-    };
-  }, [userId, details]);
-
-  if (!details) {
+  if (isLoading || !details) {
     return (
       <span className="inline-flex items-center gap-1 text-xs text-gray-500">
         <span className="w-6 h-3 bg-white/10 rounded animate-pulse" />
@@ -109,30 +92,10 @@ export function UserAge({ userId }: UserAgeProps) {
   );
 }
 
-export function UserLocation({ userId }: UserAgeProps) {
-  const [details, setDetails] = useState<ExtraDetails | null>(
-    detailsCache.get(userId) ?? null
-  );
+export function UserLocation({ userId }: UserDetailProps) {
+  const { data: details, isLoading } = useUserDetails(userId);
 
-  useEffect(() => {
-    const checkCache = () => {
-      const cached = detailsCache.get(userId);
-      if (cached && !details) {
-        setDetails(cached);
-      }
-    };
-
-    checkCache();
-    const interval = setInterval(checkCache, 100);
-    const timeout = setTimeout(() => clearInterval(interval), 5000);
-
-    return () => {
-      clearInterval(interval);
-      clearTimeout(timeout);
-    };
-  }, [userId, details]);
-
-  if (!details) {
+  if (isLoading || !details) {
     return (
       <span className="inline-flex items-center text-xs text-gray-500">
         <span className="w-16 h-3 bg-white/10 rounded animate-pulse" />
