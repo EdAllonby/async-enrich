@@ -27,3 +27,20 @@ export interface LeadershipResponse {
   data: User[];
 }
 
+export interface RandomUsersResponse {
+  success: boolean;
+  data: User[];
+}
+
+export interface RoleUsersResponse extends UsersResponse {
+  role: string;
+}
+
+export interface ExtraDetails {
+  userId: number;
+  age: number;
+  department: string;
+  location: string;
+  yearsAtCompany: number;
+}
+

@@ -2,17 +2,11 @@
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type ReactNode } from "react";
-
-export interface ExtraDetails {
-  userId: number;
-  age: number;
-  department: string;
-  location: string;
-  yearsAtCompany: number;
-}
+import { API_BASE_URL } from "./config";
+import type { ExtraDetails } from "./types";
 
 async function fetchUserDetails(userIds: number[]): Promise<ExtraDetails[]> {
-  const response = await fetch("http://localhost:3001/api/users/details", {
+  const response = await fetch(`${API_BASE_URL}/api/users/details`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userIds }),
@@ -75,34 +69,3 @@ export function useUserDetailsFromCache(userId: number): ExtraDetails | null {
   return getCachedData();
 }
 
-export function UserAge({ details }: { details: ExtraDetails | null }) {
-  if (!details) {
-    return (
-      <span className="inline-flex items-center gap-1 text-xs text-gray-500">
-        <span className="w-6 h-3 bg-white/10 rounded animate-pulse" />
-      </span>
-    );
-  }
-
-  return (
-    <span className="inline-flex items-center gap-1 text-xs text-emerald-400 font-medium animate-fadeIn">
-      {details.age} yrs
-    </span>
-  );
-}
-
-export function UserLocation({ details }: { details: ExtraDetails | null }) {
-  if (!details) {
-    return (
-      <span className="inline-flex items-center text-xs text-gray-500">
-        <span className="w-16 h-3 bg-white/10 rounded animate-pulse" />
-      </span>
-    );
-  }
-
-  return (
-    <span className="inline-flex items-center text-xs text-gray-400 animate-fadeIn">
-      📍 {details.location}
-    </span>
-  );
-}

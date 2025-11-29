@@ -1,9 +1,49 @@
 import Link from "next/link";
-import type { Pagination } from "../users/types";
+import type { Pagination as PaginationType } from "../../lib/types";
 
-export function DeveloperPagination({ pagination }: { pagination: Pagination }) {
+type AccentColor = "indigo" | "emerald" | "white";
+
+const colorStyles: Record<
+  AccentColor,
+  {
+    text: string;
+    active: string;
+    hover: string;
+  }
+> = {
+  indigo: {
+    text: "text-indigo-400",
+    active: "bg-indigo-500 text-white shadow-lg shadow-indigo-500/30",
+    hover: "hover:border-indigo-400/50",
+  },
+  emerald: {
+    text: "text-emerald-400",
+    active: "bg-emerald-500 text-white shadow-lg shadow-emerald-500/30",
+    hover: "hover:border-emerald-400/50",
+  },
+  white: {
+    text: "text-white",
+    active: "bg-white/20 text-white shadow-lg",
+    hover: "hover:border-white/30",
+  },
+};
+
+interface PaginationProps {
+  pagination: PaginationType;
+  baseUrl: string;
+  accentColor?: AccentColor;
+  label?: string;
+}
+
+export function Pagination({
+  pagination,
+  baseUrl,
+  accentColor = "indigo",
+  label = "items",
+}: PaginationProps) {
   const { currentPage, totalPages, totalItems, hasNextPage, hasPrevPage } =
     pagination;
+  const styles = colorStyles[accentColor];
 
   const getPageNumbers = () => {
     const pages: (number | "...")[] = [];
@@ -29,20 +69,27 @@ export function DeveloperPagination({ pagination }: { pagination: Pagination }) 
     return pages;
   };
 
+  const buildUrl = (page: number) => {
+    const separator = baseUrl.includes("?") ? "&" : "?";
+    return `${baseUrl}${separator}page=${page}`;
+  };
+
   return (
     <div className="flex flex-col items-center gap-4 max-w-4xl mx-auto">
       <p className="text-sm text-gray-400">
         Showing page{" "}
-        <span className="text-emerald-400 font-semibold">{currentPage}</span> of{" "}
-        <span className="text-emerald-400 font-semibold">{totalPages}</span>
-        <span className="text-gray-500 ml-2">({totalItems} developers)</span>
+        <span className={`${styles.text} font-semibold`}>{currentPage}</span> of{" "}
+        <span className={`${styles.text} font-semibold`}>{totalPages}</span>
+        <span className="text-gray-500 ml-2">
+          ({totalItems} {label})
+        </span>
       </p>
 
       <nav className="flex items-center gap-1">
         {hasPrevPage ? (
           <Link
-            href={`/developers?page=${currentPage - 1}`}
-            className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 hover:border-emerald-400/50 transition-all text-sm font-medium"
+            href={buildUrl(currentPage - 1)}
+            className={`px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 ${styles.hover} transition-all text-sm font-medium`}
           >
             ← Prev
           </Link>
@@ -61,11 +108,11 @@ export function DeveloperPagination({ pagination }: { pagination: Pagination }) 
             ) : (
               <Link
                 key={pageNum}
-                href={`/developers?page=${pageNum}`}
+                href={buildUrl(pageNum)}
                 className={`w-10 h-10 flex items-center justify-center rounded-lg text-sm font-medium transition-all ${
                   pageNum === currentPage
-                    ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/30"
-                    : "bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 hover:border-emerald-400/50"
+                    ? styles.active
+                    : `bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 ${styles.hover}`
                 }`}
               >
                 {pageNum}
@@ -76,8 +123,8 @@ export function DeveloperPagination({ pagination }: { pagination: Pagination }) 
 
         {hasNextPage ? (
           <Link
-            href={`/developers?page=${currentPage + 1}`}
-            className="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 hover:border-emerald-400/50 transition-all text-sm font-medium"
+            href={buildUrl(currentPage + 1)}
+            className={`px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 ${styles.hover} transition-all text-sm font-medium`}
           >
             Next →
           </Link>

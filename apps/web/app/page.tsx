@@ -1,19 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { RandomUsersList, RandomUsersLoading } from "./components/random-users";
-
-const roles = [
-  { name: "Developer", emoji: "👨‍💻", color: "indigo" },
-  { name: "Designer", emoji: "🎨", color: "pink" },
-  { name: "Product Manager", emoji: "📊", color: "amber" },
-  { name: "DevOps Engineer", emoji: "🔧", color: "cyan" },
-  { name: "QA Engineer", emoji: "🔍", color: "violet" },
-  { name: "Data Scientist", emoji: "📈", color: "emerald" },
-  { name: "Frontend Engineer", emoji: "🖥️", color: "sky" },
-  { name: "Backend Engineer", emoji: "⚙️", color: "slate" },
-  { name: "Full Stack Developer", emoji: "🚀", color: "orange" },
-  { name: "Engineering Manager", emoji: "👔", color: "yellow" },
-];
+import { ROLE_LIST } from "./lib/roles";
 
 export default function Home() {
   return (
@@ -69,7 +57,7 @@ export default function Home() {
           Browse by Role
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-          {roles.map((role) => (
+          {ROLE_LIST.map((role) => (
             <Link
               key={role.name}
               href={`/roles/${encodeURIComponent(role.name)}`}
